@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لیست کارهای من</title>
+<style>
+*{box-sizing:border-box}body{font-family:Tahoma,sans-serif;background:#f2f5fa;color:#17243b;margin:0;padding:64px 16px}main{max-width:650px;margin:auto;background:white;border-radius:20px;padding:28px;box-shadow:0 12px 40px #17243b12}h1{font-size:26px}p{color:#56657b}.add,.task{display:flex;gap:10px;align-items:center;flex-wrap:wrap}input{flex:1;min-width:120px;padding:12px;border:1px solid #bdc8d8;border-radius:9px;font:inherit}button{padding:11px;border:0;border-radius:9px;cursor:pointer;font:inherit;background:#e8eef8;color:#193b76}.add button{background:#285de5;color:white}ul{padding:0;list-style:none}.task{padding:16px 0;border-bottom:1px solid #edf0f5}.title{flex:1;overflow-wrap:anywhere;min-width:100px}.done{color:#727d8e;text-decoration:line-through}.delete{color:#b42318;background:#fff0ee}.errorlist{color:#b42318}
+</style>
+</head>
+<body><main>
+<h1>📝 لیست کارهای من</h1><p>کارهای امروزت رو اینجا مرتب کن.</p>
+<form method="post">{% csrf_token %}
+{{ form.title.errors }}<label for="id_title">کار جدید</label>
+<div class="add">{{ form.title }}<button type="submit">اضافه کن</button></div>
+</form>
+<ul>{% for task in tasks %}<li class="task">
+<span class="title {% if task.completed %}done{% endif %}">{{ task.title }}</span>
+<form method="post" action="{% url 'toggle' task.pk %}">{% csrf_token %}<button type="submit">{% if task.completed %}برگردان{% else %}انجام شد{% endif %}</button></form>
+<form method="post" action="{% url 'delete' task.pk %}">{% csrf_token %}<button class="delete" type="submit">حذف</button></form>
+</li>{% empty %}<li><p>هنوز کاری اضافه نکردی!</p></li>{% endfor %}</ul>
+</main></body></html>
